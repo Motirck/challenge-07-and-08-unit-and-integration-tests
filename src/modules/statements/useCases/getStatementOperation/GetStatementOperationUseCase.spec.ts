@@ -3,10 +3,13 @@ import { InMemoryUsersRepository } from "../../../users/repositories/in-memory/I
 import { CreateUserUseCase } from "../../../users/useCases/createUser/CreateUserUseCase";
 import { Statement } from "../../entities/Statement";
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository";
+import { CreateStatementError } from "../createStatement/CreateStatementError";
 import { CreateStatementUseCase } from "../createStatement/CreateStatementUseCase";
-import { CreateStatementError } from "./CreateStatementError";
+import { GetStatementOperationError } from "./GetStatementOperationError";
+import { GetStatementOperationUseCase } from "./GetStatementOperationUseCase";
 
 let createUserUseCase: CreateUserUseCase
+let getStatementOperationUseCase: GetStatementOperationUseCase
 let createStatementUseCase: CreateStatementUseCase
 let inMemoryUsersRepository: InMemoryUsersRepository
 let inMemoryStatementsRepository: InMemoryStatementsRepository
@@ -17,34 +20,28 @@ enum OperationType {
 }
 
 const user = {
-  name: 'João Rocha',
-  email: 'joao@joao.com',
-  password: '12345'
+  name: 'Matheus Rocha',
+  email: 'matheus@matheus.com',
+  password: '123456'
 };
 
 const statementDeposit = {
   user_id: '',
   type: OperationType.DEPOSIT,
-  amount: 500,
-  description: 'Deposit for help people',
-}
-
-const statementWithdraw = {
-  user_id: '',
-  type: OperationType.WITHDRAW,
-  amount: 600,
-  description: 'Withdraw for pay bills',
+  amount: 700,
+  description: 'Deposit for help people in the world',
 }
 
 let newUser: User;
 let newStatement: Statement;
 
-describe('Create Statement', () => {
+describe('Get Statement Operation', () => {
   beforeAll(async () => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
     inMemoryStatementsRepository = new InMemoryStatementsRepository();
     createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository)
     createStatementUseCase = new CreateStatementUseCase(inMemoryUsersRepository, inMemoryStatementsRepository)
+    getStatementOperationUseCase = new GetStatementOperationUseCase(inMemoryUsersRepository, inMemoryStatementsRepository)
 
     newUser = await createUserUseCase.execute({
       name: user.name,
@@ -71,20 +68,30 @@ describe('Create Statement', () => {
     expect(newUser).toHaveProperty('id');
   });
 
-  it('Should not be able to create a statement of not found user', async () => {
-    expect(async () => {
-      const fakeStatement = statementDeposit;
-      fakeStatement.user_id = 'wrong id';
+  it('Should not be able to get statement operation (deposit or withdraw)', async () => {
+    const statementFound = await getStatementOperationUseCase.execute({
+      user_id: newUser.id,
+      statement_id: newStatement.id
+    })
 
-      await createStatementUseCase.execute(fakeStatement)
-    }).rejects.toBeInstanceOf(CreateStatementError.UserNotFound)
+    expect(statementFound.description).toEqual('Deposit for help people in the world');
   });
 
-  it('Should not be able to do a withdraw greater than the current balance', async () => {
+  it('Should not be able to get statement of not found user', async () => {
     expect(async () => {
-      const fakeStatement = statementWithdraw;
-      fakeStatement.user_id = newUser.id;
-      await createStatementUseCase.execute(statementWithdraw)
-    }).rejects.toBeInstanceOf(CreateStatementError.InsufficientFunds)
+      await getStatementOperationUseCase.execute({
+        user_id: 'wrong id',
+        statement_id: newStatement.id
+      })
+    }).rejects.toBeInstanceOf(GetStatementOperationError.UserNotFound)
+  });
+
+  it('Should not be able to get statement of not found statement', async () => {
+    expect(async () => {
+      await getStatementOperationUseCase.execute({
+        user_id: newUser.id,
+        statement_id: 'wrong id',
+      })
+    }).rejects.toBeInstanceOf(GetStatementOperationError.StatementNotFound)
   });
 })
