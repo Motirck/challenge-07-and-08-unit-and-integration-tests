@@ -10,9 +10,9 @@ let createUserUseCase: CreateUserUseCase
 let inMemoryUsersRepository: InMemoryUsersRepository
 
 const user = {
-  name: 'João Rocha',
-  email: 'joao@joao.com',
-  password: '12345'
+  name: 'João Rocha da Silva',
+  email: 'joaot@joaot.com',
+  password: '123459'
 };
 
 let newUser: User;
