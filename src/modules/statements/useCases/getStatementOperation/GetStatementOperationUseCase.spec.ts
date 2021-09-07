@@ -54,6 +54,7 @@ describe('Get Statement Operation', () => {
       type: statementDeposit.type,
       amount: statementDeposit.amount,
       description: statementDeposit.description,
+      sender_id: newUser.id
     })
 
   })

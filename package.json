@@ -1,12 +1,12 @@
 {
-  "name": "challenge-07-and-08",
+  "name": "challenge-07-08-09",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn --poll ./src/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli",
-    "test": "cross-env NODE_ENV=test jest"
+    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

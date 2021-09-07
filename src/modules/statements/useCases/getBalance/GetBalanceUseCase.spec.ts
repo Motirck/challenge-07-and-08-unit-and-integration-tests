@@ -53,6 +53,7 @@ describe('Statements Balance', () => {
       type: statement.type,
       amount: statement.amount,
       description: statement.description,
+      sender_id: newUser.id
     })
 
   })

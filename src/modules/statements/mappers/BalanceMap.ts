@@ -6,6 +6,7 @@ export class BalanceMap {
       id,
       amount,
       description,
+      sender_id,
       type,
       created_at,
       updated_at
@@ -14,6 +15,7 @@ export class BalanceMap {
         id,
         amount: Number(amount),
         description,
+        sender_id: VerifySender(sender_id),
         type,
         created_at,
         updated_at
@@ -25,4 +27,11 @@ export class BalanceMap {
       balance: Number(balance)
     }
   }
+}
+
+export function VerifySender(sender: string){
+  if (sender)
+     return sender;
+  else
+    return undefined;
 }
