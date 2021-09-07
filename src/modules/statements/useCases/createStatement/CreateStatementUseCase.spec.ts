@@ -27,6 +27,7 @@ const statementDeposit = {
   type: OperationType.DEPOSIT,
   amount: 500,
   description: 'Deposit for help people',
+  sender_id: ''
 }
 
 const statementWithdraw = {
@@ -34,6 +35,7 @@ const statementWithdraw = {
   type: OperationType.WITHDRAW,
   amount: 600,
   description: 'Withdraw for pay bills',
+  sender_id: ''
 }
 
 let newUser: User;
@@ -57,6 +59,7 @@ describe('Create Statement', () => {
       type: statementDeposit.type,
       amount: statementDeposit.amount,
       description: statementDeposit.description,
+      sender_id: newUser.id
     })
 
   })
@@ -84,6 +87,7 @@ describe('Create Statement', () => {
     expect(async () => {
       const fakeStatement = statementWithdraw;
       fakeStatement.user_id = newUser.id;
+      fakeStatement.sender_id = newUser.id;
       await createStatementUseCase.execute(statementWithdraw)
     }).rejects.toBeInstanceOf(CreateStatementError.InsufficientFunds)
   });
