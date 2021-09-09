@@ -4,27 +4,26 @@
       {
           "type": "node",
           "request": "attach",
-          "name": "Launch Program",
-          "sourceMap": true,
-          "skipFiles": [
-              "<node_internals>/**"
-          ],
-          "outFiles": [
-              "${workspaceFolder}/**/*.js"
-          ]
+          "name": "Docker: Attach to Node",
+          "remoteRoot": "/usr/app/",
+          "port": 9229,
+          "address": "localhost",
+          "sourceMapPathOverrides": {
+            "/usr/app/*": "${workspaceRoot}/*"
+          }
       },
       {
-        "name": "Debug Jest Tests",
-        "type": "node",
-        "request": "launch",
-        "runtimeArgs": [
-          "--inspect-brk",
-          "${workspaceRoot}/node_modules/jest/bin/jest.js",
-          "--runInBand"
-        ],
-        "console": "integratedTerminal",
-        "internalConsoleOptions": "neverOpen",
-        "port": 9229
-      }
+          "name": "Debug Jest Tests",
+          "type": "node",
+          "request": "launch",
+          "runtimeArgs": [
+            "--inspect-brk",
+            "${workspaceRoot}/node_modules/jest/bin/jest.js",
+            "--runInBand"
+          ],
+          "console": "integratedTerminal",
+          "internalConsoleOptions": "neverOpen",
+          "port": 9229
+        }
   ]
 }

@@ -3,7 +3,7 @@ version: "3.7"
 services:
   database:
     image: postgres
-    container_name: fin_api
+    container_name: database
     ports:
       - 5432:5432
     environment:
